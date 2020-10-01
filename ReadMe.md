@@ -11,25 +11,26 @@ Other examples of values that are non-deterministic are [`Globally Unique Identi
 
 ### GetTodaysDateAsText()
 ```C#
-// Untestable version of a method that returns the current date as a text string formatted as "yyyy/MM/dd".
-// In this method the date is provided directly by the operating system making it unsuitable for unit tests.
+// Untestable version of a method that returns the current date as a text string formatted as
+// "yyyy/MM/dd".  In this method the date is provided directly by the operating system making
+// it unsuitable for unit tests.
 public string GetTodaysDateAsText()
 {
     return DateTime.Now.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 }
 
-// Testable version of the method that returns the current date as a text string formatted as "yyyy/MM/dd".
-// In this method the current date is provided by an interface parameter.  An implementation of the interface 
-// could retrieve the date from the operating system, and an alternate implementation could instead
-// use a user-provided value.
+// Testable version of the method that returns the current date as a text string formatted as
+// "yyyy/MM/dd".  In this method the current date is provided by an interface parameter.  An
+// implementation of the interface could retrieve the date from the operating systemn whereas
+// an alternate implementation could instead use a user-provided value.
 public string GetTodaysDateAsText(ICurrentDateTimeProvider currentDateTimeProvider)
 {
     return currentDateTimeProvider.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 }
 
 [Test]
-// This test provides a consistent date-time value to the method being tested. The test will always provide the same
-// result regardless of when it runs.
+// This test provides a consistent date-time value to the method being tested. The test will 
+// always provide the same result regardless of when it runs.
 public void WhenTheGetTodaysDateAsTextMethodIsInvoked_ThenTheResultIsTodaysDateFormatedAsAStringWithTheFormatYearMonthDay()
 {
     // A real program might retrieve the date from the operating system by using:
