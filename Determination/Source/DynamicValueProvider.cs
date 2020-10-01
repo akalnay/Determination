@@ -1,4 +1,9 @@
-﻿using System;
+﻿////////////////////////////////////////////////////////
+// Copyright (c) Alejandro Kalnay                     //
+// License: GNU GPLv3                                 //
+////////////////////////////////////////////////////////
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
