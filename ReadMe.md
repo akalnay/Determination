@@ -41,6 +41,8 @@ public void WhenTheGetTodaysDateAsTextMethodIsInvoked_ThenTheResultIsTodaysDateF
 ### IsItTeaTime()
 ```C#
 // Untestable version of a method to determine if the current date-time falls within a range.
+// The current date-time is provided directly by the operating system making the method
+// unsuitable for unit tests.
 public bool IsItTeaTime1(DateTime startDateTime, DateTime endDateTime)
 {
     DateTime now = DateTime.Now;
@@ -48,16 +50,19 @@ public bool IsItTeaTime1(DateTime startDateTime, DateTime endDateTime)
 }
 
 // Testable version of a method to determine if the current date-time falls within a range.
+// The current date is provided by an interface parameter.  An implementation of the interface
+// could retrieve the date from the operating systemn whereas an alternate implementation could
+// instead use a user-provided value.
 public bool IsItTeaTime1(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
 {
     DateTime now = currentDateTimeProvider.Value;
     return now >= startDateTime && now <= endDateTime;
 }
 
-// This version of the method to determine if it is tea-time has a subtle bug:  the current 
-// date time value is retrieved twice, once for each comparison.  It is possible that the
-// first time the current date time is retrieved the value falls within the required range,
-// whereas the second time it is retrieved it falls outside of the range.
+// This testable version of the method to determine if it is tea-time has a subtle bug:
+// the current date time value is retrieved twice, once for each comparison.  It is possible
+// that the first time the current date time is retrieved the value falls within the required
+// range, and when it is retrieved a second time it falls outside of the required range.
 public bool IsItTeaTime2(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
 {
     return currentDateTimeProvider.Value >= startDateTime && currentDateTimeProvider.Value <= endDateTime;
@@ -77,10 +82,9 @@ public void WhenTheIsItTeaTimeMethodIsInvoked_ThenTheResultIsTheExpectedValue()
 
 [Test]
 // Unhappy-path test for a method that determines if the current date-time falls within a
-// range.
-// Only one date-time value is provided to the ICurrentDateTimeProvider parameter in the 
-// IsItTeaTime2() method.  The IsItTeaTime2() method accesses the current date-time being provided
-// more than once therefore throwing an InvalidOperationException.
+// range.  Only one date-time value is provided to the ICurrentDateTimeProvider parameter in
+// the IsItTeaTime2() method.  The IsItTeaTime2() method accesses the current date-time being
+// provided more than once therefore throwing an InvalidOperationException.
 public void WhenTheIsItTeaTimeMethodRetrievesTheCurrentDateTimeValueMoreThanOnce_ThenAnInvalidOperationExceptionIsThrown()
 {
     Assert.Throws<InvalidOperationException>(() => IsItTeaTime2(CurrentDateTimeProviderStub.Create(new DateTime(2020, 10, 1, 18, 0, 0)),
