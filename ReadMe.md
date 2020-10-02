@@ -1,9 +1,16 @@
 # Determination #
-The objective of the `Determination` library is to provide determinism to unit tests.  [Wikipedia](https://en.wikipedia.org/wiki/Main_Page) defines a deterministic algorithm as an [*algorithm which, given a particular input, will always produce the same output, with the underlying machine always passing through the same sequence of states*](https://en.wikipedia.org/wiki/Deterministic_algorithm).
+The objective of the `Determination` library is to provide determinism to unit tests.  [Wikipedia](https://en.wikipedia.org/wiki/Main_Page) defines a deterministic algorithm as [*an algorithm which, given a particular input, will always produce the same output, with the underlying machine always passing through the same sequence of states*](https://en.wikipedia.org/wiki/Deterministic_algorithm).
 
-Good unit tests are repeatable, they always produce the same results from a fixed set of inputs.  Intuitively, this makes a lot of sense but can be challenging to achieve in real practice: for example programming logic that depends on a current date or time might give different results as the current date or time changes.  That might be desirable for a software program, however it is not so for testing it; tests need to be consistent and therefore can't depend on the current date or time.
+Good unit tests are repeatable, they always produce the same results from a fixed set of inputs.  Intuitively, this makes a lot of sense but it can be challenging to achieve in real practice: for example programming logic that depends on a current date or time might give different results as the current date or time changes.  That might be desirable for a software program, however it is not so for testing it; tests need to be consistent and therefore can't depend on the current date or time.
 
-Solving this challenge might seem easy at first:  just provide the real date-time to the actual software, and substitute the value with a pre-defined one when running unit tests.  That solution works for many cases, but not all:  sometimes a test might need the date-time being used to be more like the real thing, for example when testing the passage of time.
+In addition to being repeatable, unit tests are also expected to run quickly.  This is also a challenge when dealing with dates and times
+because sometimes a program may willfully introduce a delay on the execution of its logic.  The problem here is that while the delay
+may be needed for the execution of a given algorithm, that delay will also cause a test to slowdown to what may become an unaccetable level.
+For example, if a program introduces a 1 second delay for the execution of a loop, and the loop is expected to have 60 iterations, now the
+tests for that logic will be one minute slower.  And if there are multiple iterations of the test because of trying different combinations
+of testing parameters, then the slowdown will be an order of magnitude greater than that.
+
+Solving these challenges might seem easy at first:  just provide the real date-time to the actual software, and substitute the value with a pre-defined one when running unit tests.  That solution works for many cases, but not all:  sometimes a test might need the date-time being used to be more like the real thing, and multiple *"current date-time"* values will be needed.
 
 Other examples of values that are non-deterministic are [`Globally Unique Identifiers`](https://en.wikipedia.org/wiki/Universally_unique_identifier) and values that are generated through randomization.
 
@@ -196,7 +203,7 @@ public sealed class CountdownTimer
 // This test requires that a different value is returned whenever a request for the current
 // date-time is made.  This is with the intent of simulating the passage of time.
 // In the test, time is incremented by 10 minute intervals; if the starting time is at noon,
-// then the next time that the current time is requested it will be 10 minutes after
+// then the next time that the current date-time is requested it will be 10 minutes after
 // that and so on.
 public async Task WhenTheCountdownTimerStops_ThenTheCurrentDateTimeIsTheDesignatedStopTime()
 {
