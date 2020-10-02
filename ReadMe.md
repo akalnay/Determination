@@ -194,10 +194,9 @@ public sealed class CountdownTimer
 [Category("CountdownTimer Tests")]
 // Test that the CountdownTimer stops at the designated DateTime.
 // This test requires that a different value is returned whenever a request for the current
-// date-time is made to the class implementing the ICurrentDateTimeProvider interface.  This
-// is with the intent of simulating the passage of time.  In the test, time is
-// incremented by 10 minute intervals; if the starting time is at noon, then
-// the next time that the current time is requested it will be 10 minutes after
+// date-time is made.  This is with the intent of simulating the passage of time.
+// In the test, time is incremented by 10 minute intervals; if the starting time is at noon,
+// then the next time that the current time is requested it will be 10 minutes after
 // that and so on.
 public async Task WhenTheCountdownTimerStops_ThenTheCurrentDateTimeIsTheDesignatedStopTime()
 {
