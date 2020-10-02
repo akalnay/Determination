@@ -52,7 +52,7 @@ public bool IsItTeaTime1(DateTime startDateTime, DateTime endDateTime)
 // Testable version of a method to determine if the current date-time falls within a range.
 // The current date is provided by an interface parameter.  An implementation of the interface
 // could retrieve the date from the operating systemn whereas an alternate implementation could
-// instead use a user-provided value.
+// rely on a user-provided value.
 public bool IsItTeaTime1(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
 {
     DateTime now = currentDateTimeProvider.Value;
@@ -62,7 +62,7 @@ public bool IsItTeaTime1(ICurrentDateTimeProvider currentDateTimeProvider, DateT
 // This testable version of the method to determine if it is tea-time has a subtle bug:
 // the current date time value is retrieved twice, once for each comparison.  It is possible
 // that the first time the current date time is retrieved the value falls within the required
-// range, and when it is retrieved a second time it falls outside of the required range.
+// range, and when it is retrieved a second time it falls outside of the range.
 public bool IsItTeaTime2(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
 {
     return currentDateTimeProvider.Value >= startDateTime && currentDateTimeProvider.Value <= endDateTime;
@@ -106,4 +106,151 @@ public void WhenTheIsItTeaTimeMethodRetrievesTheCurrentDateTimeValueMoreThanOnce
                                 new DateTime(2020, 10, 1, 16, 0, 0),
                                 new DateTime(2020, 10, 1, 18, 0, 0)));
 }
+```
+### CountdownTimer
+The CountdownTimer class gives functionality somewhat similar to that in a
+microwave oven's timer.  The functionality differs in that the timer in a microwave
+oven will countdown for a specified time (e.g. for one minute) whereas
+the CountdownTimer will count down until it a specified date-time is reached.
+```C#
+#region CountdownTimer Class
+
+/// <summary>
+/// Conveys data regarding an iteration of a <see cref="CountdownTimer"/> loop.
+/// </summary>
+public class CountdownTimerLoopElapsedEventArgs : EventArgs
+{
+    public CountdownTimerLoopElapsedEventArgs(TimeSpan remainingTime)
+    {
+        RemainingTime = remainingTime;
+    }
+
+    public TimeSpan RemainingTime { get; }
+}
+
+/// <summary>
+/// Represents a countdown timer.
+/// </summary>
+/// <remarks>
+/// The CountdownTimer class gives functionality somewhat similar to that in a
+/// microwave oven's timer.  Where the functionality differs in that the timer in
+/// a microwave oven will countdown for a specified time (e.g. for one minute) whereas
+/// the CountdownTimer will count down until a specified <see cref="DateTime"/>.
+/// </remarks>
+public sealed class CountdownTimer
+{
+    /// <summary>
+    /// Occurs when an iteration of the countdown timer's loop elapses.
+    /// </summary>
+    public event EventHandler<CountdownTimerLoopElapsedEventArgs> LoopElapsed;
+
+    private void OnLoopElapsed(TimeSpan remainingTime) => LoopElapsed?.Invoke(this, new CountdownTimerLoopElapsedEventArgs(remainingTime));
+
+    private async Task DoTimerLoopsAsync(DateTime stopDateTime, ICurrentDateTimeProvider currentDateTimeProvider, int interval)
+    {
+        TimeSpan GetRemainingTime(DateTime stopDtTm, DateTime now)
+        {
+            TimeSpan result = stopDtTm.Subtract(now);
+            if (result < TimeSpan.Zero)
+                result = TimeSpan.Zero;
+            return result;
+        }
+
+        TimeSpan remainingTime;
+        while ((remainingTime = GetRemainingTime(stopDateTime, currentDateTimeProvider.Value)) > TimeSpan.Zero)
+        {
+            OnLoopElapsed(remainingTime);
+            await Task.Delay(interval).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously starts the countdown timer
+    /// </summary>
+    /// <param name="stopDateTime">
+    /// Determines when the Countdown Timer should stop.
+    /// </param>
+    /// <param name="interval">
+    /// Determines the interval in milliseconds to use for asynchronously suspending execution of the timer.
+    /// The timer is suspended in a non-blocking manner.
+    /// </param>
+    /// <param name="currentDateTimeProvider">
+    /// Represents an instance of a class that when queried will provide a value for the current date-time.
+    /// </param>
+    /// <returns>
+    /// The task object representing the asynchronous operation.
+    /// </returns>
+    public async Task StartAsync(DateTime stopDateTime, int interval, ICurrentDateTimeProvider currentDateTimeProvider)
+    {
+        await DoTimerLoopsAsync(stopDateTime, currentDateTimeProvider, interval).ConfigureAwait(false);
+    }
+}
+
+#endregion CountdownTimer Class
+
+#region Tests for the CountdownTimer class
+
+[Test]
+[Category("CountdownTimer Tests")]
+public async Task WhenTheCountdownTimerStops_ThenTheCurrentDateTimeIsTheDesignatedStopTime()
+{
+    const double minutesIncrement = 10;
+    CountdownTimer countdownTimer = new CountdownTimer();
+    DateTime stopDateTime = new DateTime(2020, 10, 1, 13, 0, 0);            // 10/01/2020 at 1 PM
+    CurrentDateTimeProviderStub currentDateTimeProvider =
+        CurrentDateTimeProviderStub.Create(stopDateTime.AddHours(-1),       // The first date-time
+                                                                            // that will be returned
+                                                                            // by the currentDateTimeProvider
+                                                                            // will be exactly one hour prior
+                                                                            // to the designated stopDateTime.
+
+                                            minutesIncrement,               // After the first date-time
+                                                                            // has been retrieved, whenever the
+                                                                            // currentDateTimeProvider
+                                                                            // is queried for the
+                                                                            // current DateTime, the
+                                                                            // value returned will be
+                                                                            // an increment of the previous
+                                                                            // value returned.
+                                            (dateTime, minutes) => dateTime.AddMinutes(minutes));
+    await countdownTimer.StartAsync(stopDateTime, 0, currentDateTimeProvider).ConfigureAwait(false);
+    Assert.AreEqual(stopDateTime, currentDateTimeProvider.CurrentValue);    
+}
+
+[Test]
+[Category("CountdownTimer Tests")]
+public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemainingTimeHasTheExpectedValue()
+{
+    const double minutesIncrement = 10;
+    TimeSpan[] expectedRemainingTimes =
+    {
+        TimeSpan.FromMinutes(60), TimeSpan.FromMinutes(50), TimeSpan.FromMinutes(40),
+        TimeSpan.FromMinutes(30), TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(10)
+    };
+    Collection<TimeSpan> actualRemainingTimes = new Collection<TimeSpan>();
+    CountdownTimer countdownTimer = new CountdownTimer();
+    countdownTimer.LoopElapsed += (o, e) => actualRemainingTimes.Add(e.RemainingTime);
+    DateTime stopDateTime = new DateTime(2020, 10, 1, 13, 0, 0);            // 10/01/2020 at 1 PM
+    CurrentDateTimeProviderStub currentDateTimeProvider =
+        CurrentDateTimeProviderStub.Create(stopDateTime.AddHours(-1),       // The first date-time
+                                                                            // that will be returned
+                                                                            // by the currentDateTimeProvider
+                                                                            // will be exactly one hour prior
+                                                                            // to the designated stopDateTime.
+
+                                            minutesIncrement,               // After the first date-time
+                                                                            // has been retrieved, whenever the
+                                                                            // currentDateTimeProvider
+                                                                            // is queried for the
+                                                                            // current DateTime, the
+                                                                            // value returned will be
+                                                                            // an increment of the previous
+                                                                            // value returned.
+                                            (dateTime, minutes) => dateTime.AddMinutes(minutes));
+    await countdownTimer.StartAsync(stopDateTime, 0, currentDateTimeProvider).ConfigureAwait(false);
+    CollectionAssert.AreEqual(expectedRemainingTimes, actualRemainingTimes);
+}
+
+#endregion Tests for the CountdownTimer class
+
 ```
