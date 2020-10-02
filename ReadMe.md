@@ -111,7 +111,7 @@ public void WhenTheIsItTeaTimeMethodRetrievesTheCurrentDateTimeValueMoreThanOnce
 The CountdownTimer class gives functionality somewhat similar to that in a
 microwave oven's timer.  The functionality differs in that the timer in a microwave
 oven will countdown for a specified time (e.g. for one minute) whereas
-the CountdownTimer will count down until it a specified date-time is reached.
+the CountdownTimer will count down until a specified date-time is reached.
 ```C#
 #region CountdownTimer Class
 
@@ -192,6 +192,7 @@ public sealed class CountdownTimer
 
 [Test]
 [Category("CountdownTimer Tests")]
+// Test that the CountdownTimer stops at the designated DateTime
 public async Task WhenTheCountdownTimerStops_ThenTheCurrentDateTimeIsTheDesignatedStopTime()
 {
     const double minutesIncrement = 10;
@@ -219,6 +220,8 @@ public async Task WhenTheCountdownTimerStops_ThenTheCurrentDateTimeIsTheDesignat
 
 [Test]
 [Category("CountdownTimer Tests")]
+// Test that the when the CountdownTimer's LoopElapsed event is raised then
+// the event's RemainingTime property has the expected value.
 public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemainingTimeHasTheExpectedValue()
 {
     const double minutesIncrement = 10;
