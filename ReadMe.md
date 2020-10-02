@@ -7,10 +7,10 @@ In addition to being repeatable, unit tests are also expected to run quickly.  T
 because sometimes a program may willfully introduce a delay on the execution of its logic.  The problem here is that while the delay
 may be needed for the execution of a given algorithm, that delay will also cause a test to slowdown to what may become an unaccetable level.
 For example, if a program introduces a 1 second delay for the execution of a loop, and the loop is expected to have 60 iterations, now the
-tests for that logic will be one minute slower.  And if there are multiple iterations of the test because of trying different combinations
+tests for that logic will be one minute slower.  And if there are multiple iterations of the test because it requires different combinations
 of testing parameters, then the slowdown will be an order of magnitude greater than that.
 
-Solving these challenges might seem easy at first:  just provide the real date-time to the actual software, and substitute the value with a pre-defined one when running unit tests.  That solution works for many cases, but not all:  sometimes a test might need the date-time being used to be more like the real thing, and multiple *"current date-time"* values will be needed.
+Solving these challenges might seem easy at first:  just provide the real date-time to the actual software, and substitute that value with a pre-defined one when running unit tests.  That solution works for many cases, but not all:  sometimes a test might need the date-time being used to be more like the real thing, and multiple *"current date-time"* values will be needed.
 
 Other examples of values that are non-deterministic are [`Globally Unique Identifiers`](https://en.wikipedia.org/wiki/Universally_unique_identifier) and values that are generated through randomization.
 
