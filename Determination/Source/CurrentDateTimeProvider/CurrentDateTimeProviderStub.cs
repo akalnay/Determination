@@ -39,12 +39,19 @@ namespace Determination
 
         protected override string CurrentValueToString() => CurrentValue.ToString(CultureInfo.CurrentCulture);
 
-        private static bool CompareCurrentAndNext(DateTime currentValue, DateTime nextValue) => nextValue > currentValue;
+        private static bool CompareCurrentAndNext(DateTime currentValue, DateTime nextValue)
+        {
+            return nextValue > currentValue;
+        }
 
         #region Factory Methods
 
         public static CurrentDateTimeProviderStub Create(params DateTime[] values)
         {
+            if (values == null)
+                throw new ArgumentNullException();
+            if (values.Length < 1)
+                throw new ArgumentException($"{nameof(values)} array is empty.");
             return new CurrentDateTimeProviderStub(values);
         }
 

@@ -13,7 +13,7 @@ namespace Determination
     {
         #region Fields
 
-        private const string _comparisonFailedMessageDefault = "Current and next value comparison failed.";
+        private const string _COMPARISONFAILEDMESSAGEDEFAULT = "Current and next value comparison failed.";
         private readonly IEnumerator<T> _enumerator;
         private readonly Func<T, T, bool> _compareCurrentAndNext;
         private readonly string _comparisonFailedMessage;
@@ -29,7 +29,7 @@ namespace Determination
         {
         }
 
-        protected DynamicValueProvider(Func<T, T, bool> compareCurrentAndNext, params T[] values) : this(_comparisonFailedMessageDefault, compareCurrentAndNext, values)
+        protected DynamicValueProvider(Func<T, T, bool> compareCurrentAndNext, params T[] values) : this(_COMPARISONFAILEDMESSAGEDEFAULT, compareCurrentAndNext, values)
         {
         }
 
@@ -41,7 +41,7 @@ namespace Determination
         {
         }
 
-        protected DynamicValueProvider(Func<T, T, bool> compareCurrentAndNext, IEnumerable<T> values) : this(_comparisonFailedMessageDefault, compareCurrentAndNext, values)
+        protected DynamicValueProvider(Func<T, T, bool> compareCurrentAndNext, IEnumerable<T> values) : this(_COMPARISONFAILEDMESSAGEDEFAULT, compareCurrentAndNext, values)
         {
         }
 

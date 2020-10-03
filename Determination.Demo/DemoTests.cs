@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Determination.Tests.CurrentDateTimeProvider
+namespace Determination.Tests
 {
     public class DemoTests
     {
