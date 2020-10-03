@@ -220,6 +220,7 @@ namespace Determination.Tests.CurrentDateTimeProvider
         // For the test to pass, the RemaningTime property must have held the values
         // { 60 minutes, 50 minutes, 40 minutes, 30 minutes, 20 minutes, 10 minutes }.
         // The CountdownTimer should stop at exactly 1 PM on 10/01/2020.
+        // The test is set to simulate that it is being started at 12 noon on 10/01/2020.
         public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemainingTimeHasTheExpectedValue()
         {
             const double minutesIncrement = 10;
