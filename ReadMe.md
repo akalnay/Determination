@@ -115,7 +115,7 @@ public void WhenTheIsItTeaTimeMethodRetrievesTheCurrentDateTimeValueMoreThanOnce
 }
 ```
 ### CountdownTimer
-The CountdownTimer class gives functionality somewhat similar to that in a
+The CountdownTimer class gives functionality somewhat similar to that of a
 microwave oven's timer.  The functionality differs in that the timer in a microwave
 oven will countdown for a specified time (e.g. for one minute) whereas
 the CountdownTimer will count down until a specified date-time is reached.
