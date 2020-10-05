@@ -59,7 +59,7 @@ namespace Determination.Tests
         // Test that the Value property of a CurrentDateTimeProviderStub instance 
         // that was created from an array of date-times can be used to create
         // a collection that has the same date-times.
-        public ICollection<DateTime> When_Then(DateTime[] values)
+        public ICollection<DateTime> AllTheDateTimesThatWereProvidedToTheFactoryMethodCanBeRetrieved(DateTime[] values)
         {
             ICollection<DateTime> providerDateTimes                 = new Collection<DateTime>();
             CurrentDateTimeProviderStub currentDateTimeProviderStub = CurrentDateTimeProviderStub.Create(values);
