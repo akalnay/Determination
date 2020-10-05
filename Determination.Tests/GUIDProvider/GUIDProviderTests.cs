@@ -11,14 +11,14 @@ namespace Determination.Tests
     public sealed class GUIDProviderTests
     {
         [Test]
-        [Category("GUIDProvider Tests")]
+        [Category("1 - GUIDProvider Tests")]
         public void WhenTheGuidProviderClassIsInstantiated_ThenAnExceptionIsNotThrown()
         {
             Assert.DoesNotThrow(() => _ = new GuidProvider());
         }
 
         [Test]
-        [Category("GUIDProvider Tests")]
+        [Category("1 - GUIDProvider Tests")]
         public void WhenTheGuidProviderValuePropertyIsRetrieved_ThenAnExceptionIsNotThrown()
         {
             Assert.DoesNotThrow(() => _ = new GuidProvider().Value);

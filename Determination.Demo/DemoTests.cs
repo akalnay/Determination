@@ -22,7 +22,7 @@ namespace Determination.Demo
         }
 
         [Test]
-        [Category("Demo - CurrentDateTimeProvider - GetTodaysDateAsText Tests")]
+        [Category("2 - Demo - CurrentDateTimeProvider - GetTodaysDateAsText Tests")]
         // This test provides a consistent date-time value to the method being tested. The test will
         // always provide the same result regardless of when it runs.
         public void WhenTheGetTodaysDateAsTextMethodIsInvoked_ThenTheResultIsTodaysDateFormatedAsAStringWithTheFormatYearMonthDay()
@@ -60,7 +60,7 @@ namespace Determination.Demo
         #endregion SUTs
 
         [Test]
-        [Category("Demo - CurrentDateTimeProvider - IsItTeaTime() Tests")]
+        [Category("2 - Demo - CurrentDateTimeProvider - IsItTeaTime() Tests")]
         // Happy-path test for a method that determines if the current date-time falls within a range.
         // Only one date-time value is provided to the ICurrentDateTimeProvider parameter in the IsItTeaTime1() method.
         public void WhenTheIsItTeaTimeMethodIsInvoked_ThenTheResultIsTheExpectedValue()
@@ -71,7 +71,7 @@ namespace Determination.Demo
         }
 
         [Test]
-        [Category("Demo - CurrentDateTimeProvider - IsItTeaTime() Tests")]
+        [Category("2 - Demo - CurrentDateTimeProvider - IsItTeaTime() Tests")]
         // Unhappy-path test for a method that determines if the current date-time falls within a range.
         // Only one date-time value is provided to the ICurrentDateTimeProvider parameter in the IsItTeaTime2() method.
         // The IsItTeaTime2() method accesses the current date-time being provided more than once therefore
@@ -84,7 +84,7 @@ namespace Determination.Demo
         }
 
         [Test]
-        [Category("Demo - CurrentDateTimeProvider - IsItTeaTime() Tests")]
+        [Category("2 - Demo - CurrentDateTimeProvider - IsItTeaTime() Tests")]
         // Another unhappy-path test for a method that determines if the current date-time falls within a range.
         // Two date-time values are provided to the ICurrentDateTimeProvider parameter in the IsItTeaTime2() method.
         // While the first date-time provided to the ICurrentDateTimeProvider parameter falls within the required range,
@@ -180,7 +180,7 @@ namespace Determination.Demo
         #region Tests for the CountdownTimer class
 
         [Test]
-        [Category("Demo - CurrentDateTimeProvider - CountdownTimer Tests")]
+        [Category("2 - Demo - CurrentDateTimeProvider - CountdownTimer Tests")]
         // This is a test for a CountdownTimer.  For the test to pass, the CountdownTimer must
         // stop at exactly 1 PM on 10/01/2020.
         // An instance of the CurrentDateTimeProviderStub class is in charge of providing the
@@ -218,7 +218,7 @@ namespace Determination.Demo
         }
 
         [Test]
-        [Category("Demo - CurrentDateTimeProvider - CountdownTimer Tests")]
+        [Category("2 - Demo - CurrentDateTimeProvider - CountdownTimer Tests")]
         // Another test for a CountdownTimer.  
         // This test determines if the CountdownTimer's LoopElapsed event has the expected
         // values for the RemainingTime property of the event's handler.

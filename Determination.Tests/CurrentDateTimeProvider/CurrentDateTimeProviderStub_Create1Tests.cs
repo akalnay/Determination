@@ -45,7 +45,7 @@ namespace Determination.Tests
         #region Happy Path Tests
 
         [Test]
-        [Category("CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
+        [Category("1 - CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
         // Test that the Value property of a newly created CurrentDateTimeProviderStub instance
         // has the expected value.
         public void WhenTheValuePropertyIsRetrieved_ThenItHasTheValueOfTheArgumentProvidedToTheFactoryMethod()
@@ -55,7 +55,7 @@ namespace Determination.Tests
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.GetDateTimes2))]
-        [Category("CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
+        [Category("1 - CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
         // Test that the Value property of a CurrentDateTimeProviderStub instance 
         // that was created from an array of date-times can be used to create
         // a collection that has the same date-times.
@@ -83,7 +83,7 @@ namespace Determination.Tests
         #region Unhappy Path Tests
 
         [Test]
-        [Category("CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
+        [Category("1 - CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
         // Test for empty params array.
         // Should throw an ArgumentException:
         // ArgumentException: values array is empty.
@@ -93,7 +93,7 @@ namespace Determination.Tests
         }
 
         [Test]
-        [Category("CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
+        [Category("1 - CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
         // Test for null params array.
         // Should throw an ArgumentNullException.
         // ArgumentNullException: Value cannot be null.
@@ -103,7 +103,7 @@ namespace Determination.Tests
         }
 
         [Test]
-        [Category("CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
+        [Category("1 - CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
         // Test that the if the CurrentDateTimeProviderStub instance is seeded with only
         // one DateTime value and the instance's Value property is accessed more than once,
         // then an InvalidOperationException is thrown.
@@ -120,7 +120,7 @@ namespace Determination.Tests
         // then an InvalidOperationException is thrown:
         // InvalidOperationException: A new DateTime value must be greater than the previous one.
         [TestCaseSource(typeof(TestCases), nameof(TestCases.GetDateTimes1))]
-        [Category("CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
+        [Category("1 - CurrentDateTimeProviderStub - Create(params DateTime[] values) Tests")]
         public void WhenTheCurrentDateTimeIsNotGreaterThanThePreviousDateTime_ThanAnInvalidOperationExceptionIsThrown(DateTime dateTime1, DateTime dateTime2)
         {
             CurrentDateTimeProviderStub x = CurrentDateTimeProviderStub.Create(dateTime1, dateTime2);

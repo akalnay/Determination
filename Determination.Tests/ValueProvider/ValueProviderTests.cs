@@ -11,14 +11,14 @@ namespace Determination.Tests
     public sealed class ValueProviderTests
     {
         [Test]
-        [Category("ValueProvider Tests")]
+        [Category("1 - ValueProvider Tests")]
         public void WhenTheValueProviderClassIsInstantiated_ThenAnExceptionIsNotThrown()
         {
             Assert.DoesNotThrow(() => _ = ValueProvider.Create(DirectionManager.GetNextRandomDirection));
         }
 
         [Test]
-        [Category("ValueProvider Tests")]
+        [Category("1 - ValueProvider Tests")]
         public void WhenTheValueProviderValuePropertyIsRetrieved_ThenAnExceptionIsNotThrown()
         {
             Assert.DoesNotThrow(() => _ = ValueProvider.Create(DirectionManager.GetNextRandomDirection).Value);
