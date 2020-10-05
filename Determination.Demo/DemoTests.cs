@@ -1,4 +1,9 @@
-﻿using NUnit.Framework;
+﻿////////////////////////////////////////////////////////
+// Copyright (c) Alejandro Kalnay                     //
+// License: GNU GPLv3                                 //
+////////////////////////////////////////////////////////
+
+using NUnit.Framework;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;

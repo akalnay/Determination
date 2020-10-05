@@ -1,8 +1,13 @@
-﻿using NUnit.Framework;
+﻿////////////////////////////////////////////////////////
+// Copyright (c) Alejandro Kalnay                     //
+// License: GNU GPLv3                                 //
+////////////////////////////////////////////////////////
+
+using NUnit.Framework;
 
 namespace Determination.Tests
 {
-    // Sanity Check tests for CurrentDateTimeProvider class
+    // Sanity Check tests for the CurrentDateTimeProvider class
     public sealed class CurrentDateTimeProviderTests
     {
         [Test]
