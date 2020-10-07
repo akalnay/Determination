@@ -3,16 +3,17 @@ The objective of the `Determination` library is to provide determinism to unit t
 
 Good unit tests are repeatable, they always produce the same results from a fixed set of inputs.  Intuitively, this makes a lot of sense but it can be challenging to achieve in real practice: for example programming logic that depends on a current date or time might give different results as the current date or time changes.  That might be desirable for a software program, however it is not so for testing it; tests need to be consistent and therefore can't depend on the current date or time.
 
-In addition to being repeatable, unit tests are also expected to run quickly.  This is also a challenge when dealing with dates and times
+In addition to being repeatable, unit tests are also expected to run quickly; this is also a challenge when dealing with dates and times
 because sometimes a program may willfully introduce a delay on the execution of its logic.  The problem here is that while the delay
 may be needed for the execution of a given algorithm, that delay will also cause a test to slowdown to what may become an unaccetable level.
-For example, if a program introduces a 1 second delay for the execution of a loop, and the loop is expected to have 60 iterations, now the
-tests for that logic will be one minute slower.  And if there are multiple iterations of the test because it requires different combinations
-of testing parameters, then the slowdown will be an order of magnitude greater than that.
+For example, if a program introduces a 1 second delay for the execution of a loop, and the loop is expected to have 60 iterations, now any
+tests that require execution of the loop will be one minute slower.  And if there are multiple iterations of the test because it requires different combinations of testing parameters, then the slowdown will be an order of magnitude greater than that.
 
-Solving these challenges might seem easy at first:  just provide the real date-time to the actual software, and substitute that value with a pre-defined one when running unit tests.  That solution works for many cases, but not all:  sometimes a test might need the date-time being used to be more like the real thing, and multiple *"current date-time"* values will be needed.
+Solving these challenges might seem easy at first:  just provide the real date-time to the actual software, and substitute that value with a pre-defined one when running unit tests.  That solution works for many cases, but not all:  sometimes a test might need to simulate the passage of time, and multiple *"current date-time"* values will be needed; or in the case of random values, multiple values might be required.
 
-Other examples of values that are non-deterministic are [`Globally Unique Identifiers`](https://en.wikipedia.org/wiki/Universally_unique_identifier) and values that are generated through randomization.
+Aside from date-time values, other examples of values that are non-deterministic are [`Globally Unique Identifiers`](https://en.wikipedia.org/wiki/Universally_unique_identifier) and values that are generated through randomization.
+
+Regarding randomization the `Determination` library brings in other benefits in addition to improved testability:  it allows flexibility on how the randomization is implemented.  For example `.NET` offers a couple of mechanisms for randomization:  There is the [System.Random](https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netcore-3.1) class and also the [System.Security.Cryptography.RNGCryptoServiceProvider](https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.rngcryptoserviceprovider?view=netcore-3.1) class.  In a production system either one of those classes, or perhaps something else might be used to generate random values; for testing a user may one to provide some hard-coded values instead.
 
 ## Examples
 
