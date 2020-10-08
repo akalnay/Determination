@@ -262,7 +262,7 @@ public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemaining
 #endregion Tests for the CountdownTimer class
 ```
 ### Card Game
-This example shows how to use the `Determination` library to test software that depends on randomized values.  The CardGame class in the example has very simple functionality:  allows a user to randomly select a card from a set of cards.  There are three rules that must be verified when a card is retrieved:  that there are still cards available to retrieve, that after the card is retrieved that same card can't be retrieved again, and that after all possible cards have been retrieved then the class property `RemainingCards` is empty.
+This example shows how to use the `Determination` library to test software that depends on randomized values.  The CardGame class in the example has very simple functionality:  it allows a user to randomly select a card from a set of cards.  There are three rules that must be verified when a card is retrieved:  that there are still cards available to retrieve, that after the card is retrieved that same card can't be retrieved again, and that after all possible cards have been retrieved then the class property `RemainingCards` is empty.
 ```C#
 #region Card Struct and CardGame class
 
@@ -309,7 +309,7 @@ internal class CardGame
     /// Initializes a new instance of the <see cref="CardGame"></see> class.
     /// </summary>
     /// <param name="valueProvider">
-    /// Provides <see cref="Card"/> instances.
+    /// Provides deterministic <see cref="Card"/> instances.
     /// </param>
     public CardGame(IValueProvider<Card> valueProvider)
     {
@@ -373,7 +373,7 @@ internal class CardGame
     {
         if (!RemainingCards.Any())
             throw new InvalidOperationException("There are no cards remaining to dispurse.");
-        Card card = default;
+        Card card              = default;
         bool continueSelecting = true;
         while (continueSelecting)
         {
@@ -428,7 +428,7 @@ internal class CardGame
     {
         if (!RemainingCards.Any())
             throw new InvalidOperationException("There are no cards remaining to dispurse.");
-        Card card = default;
+        Card card              = default;
         bool continueSelecting = true;
         while (continueSelecting)
         {
@@ -445,10 +445,10 @@ internal class CardGame
     private IEnumerable<Card> GetAllCards()
     {
         IEnumerable<Card> allCards = Enum.GetValues(typeof(Rank))
-                                            .Cast<Rank>()
-                                            .SelectMany(rank => Enum.GetValues(typeof(Suit))
-                                                                    .Cast<Suit>()
-                                                                    .Select(suit => new Card(rank, suit)));
+                                         .Cast<Rank>()
+                                         .SelectMany(rank => Enum.GetValues(typeof(Suit))
+                                                                 .Cast<Suit>()
+                                                                 .Select(suit => new Card(rank, suit)));
         return allCards;
     }
 

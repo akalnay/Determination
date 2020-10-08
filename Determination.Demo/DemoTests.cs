@@ -317,7 +317,7 @@ namespace Determination.Demo
             /// Initializes a new instance of the <see cref="CardGame"></see> class.
             /// </summary>
             /// <param name="valueProvider">
-            /// Provides <see cref="Card"/> instances.
+            /// Provides deterministic <see cref="Card"/> instances.
             /// </param>
             public CardGame(IValueProvider<Card> valueProvider)
             {
@@ -381,7 +381,7 @@ namespace Determination.Demo
             {
                 if (!RemainingCards.Any())
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
-                Card card = default;
+                Card card              = default;
                 bool continueSelecting = true;
                 while (continueSelecting)
                 {
@@ -436,7 +436,7 @@ namespace Determination.Demo
             {
                 if (!RemainingCards.Any())
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
-                Card card = default;
+                Card card              = default;
                 bool continueSelecting = true;
                 while (continueSelecting)
                 {
