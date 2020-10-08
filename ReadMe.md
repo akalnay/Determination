@@ -477,11 +477,11 @@ internal class CardGame
 public void WhenCardsRemainingPropertyIsEmptyAndTheGetCard2MethodIsInvoked_ThenAnInvalidOperationExceptionIsThrown()
 {
     Card[] allCards = Enum.GetValues(typeof(Rank))
-                            .Cast<Rank>()
-                            .SelectMany(rank => Enum.GetValues(typeof(Suit))
-                                                    .Cast<Suit>()
-                                                    .Select(suit => new Card(rank, suit)))
-                            .ToArray();
+                          .Cast<Rank>()
+                          .SelectMany(rank => Enum.GetValues(typeof(Suit))
+                                                  .Cast<Suit>()
+                                                  .Select(suit => new Card(rank, suit)))
+                          .ToArray();
     CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
     for (int i = 0; i < allCards.Length; i++)                                   // After the last iteration of this
         _ = cardGame.GetCard2();                                                // loop there will be no cards remaining.
@@ -498,11 +498,11 @@ public void WhenCardsRemainingPropertyIsEmptyAndTheGetCard2MethodIsInvoked_ThenA
 public void WhenACardIsRetrievedByInvokingTheGetCard2Method_ThenTheCardIsNoLongerContainedInTheRemainingCardsSet()
 {
     Card[] allCards = Enum.GetValues(typeof(Rank))
-                            .Cast<Rank>()
-                            .SelectMany(rank => Enum.GetValues(typeof(Suit))
-                                                    .Cast<Suit>()
-                                                    .Select(suit => new Card(rank, suit)))
-                            .ToArray();
+                          .Cast<Rank>()
+                          .SelectMany(rank => Enum.GetValues(typeof(Suit))
+                                                  .Cast<Suit>()
+                                                  .Select(suit => new Card(rank, suit)))
+                          .ToArray();
     CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
     for (int i = 0; i < allCards.Length; i++)
     {
@@ -518,11 +518,11 @@ public void WhenACardIsRetrievedByInvokingTheGetCard2Method_ThenTheCardIsNoLonge
 public void WhenAllCardsHaveBeenRetrievedByInvokingTheGetCard2Method_ThenTheRemainingCardsPropertyIsEmpty()
 {
     Card[] allCards = Enum.GetValues(typeof(Rank))
-                            .Cast<Rank>()
-                            .SelectMany(rank => Enum.GetValues(typeof(Suit))
-                                                    .Cast<Suit>()
-                                                    .Select(suit => new Card(rank, suit)))
-                            .ToArray();
+                          .Cast<Rank>()
+                          .SelectMany(rank => Enum.GetValues(typeof(Suit))
+                                                  .Cast<Suit>()
+                                                  .Select(suit => new Card(rank, suit)))
+                          .ToArray();
     CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
     for (int i = 0; i < allCards.Length; i++)
         _ = cardGame.GetCard2();
