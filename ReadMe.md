@@ -1,7 +1,7 @@
 # Determination #
 The objective of the `Determination` library is to provide determinism to unit tests.  [Wikipedia](https://en.wikipedia.org/wiki/Main_Page) defines a deterministic algorithm as [*an algorithm which, given a particular input, will always produce the same output, with the underlying machine always passing through the same sequence of states*](https://en.wikipedia.org/wiki/Deterministic_algorithm).
 
-Good unit tests are repeatable, they always produce the same results from a fixed set of inputs.  Intuitively, this makes a lot of sense but it can be challenging to achieve in real practice: for example a program may use the current date-time somewhere in its logic, or use a [`Globally Unique Identifiers`](https://en.wikipedia.org/wiki/Universally_unique_identifier) to provide uniqueness to an object, or perhaps use randomization.  All of those are examples of values that will be different everytime a program runs, but testing any logic that depends on those values will require them to be consistent for each test iteration.
+Good unit tests are repeatable, they always produce the same results from a fixed set of inputs.  Intuitively, this makes a lot of sense but it can be challenging to achieve in real practice: for example a program may use the current date-time somewhere in its logic, or use a [`Globally Unique Identifier`](https://en.wikipedia.org/wiki/Universally_unique_identifier) to provide uniqueness to an object, or perhaps use randomization.  All of those are examples of values that will be different everytime a program runs, however testing any logic that depends on those values will require them to be consistent for each test iteration.
 
 In addition to being repeatable, unit tests are also expected to run quickly.  A program may willfully introduce a delay to the execution of its logic; a delay that might be desirable in a production environment will have a detrimental impact on how swiftly tests execute.
 
@@ -262,7 +262,7 @@ public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemaining
 #endregion Tests for the CountdownTimer class
 ```
 ### Card Game
-This example shows how to use the `Determination` library to test software that depends on randomized values.
+This example shows how to use the `Determination` library to test software that depends on randomized values.  The CardGame class in the example has very simple functionality:  allows a user to randomly select a card from a set of cards.  There are three rules that must be verified when a card is retrieved:  that there are still cards available to retrieve, that after the card is retrieved that same card can't be retrieved again, and that after all possible cards have been retrieved then the class property `RemainingCards` is empty.
 ```C#
 #region Card Struct and CardGame class
 
