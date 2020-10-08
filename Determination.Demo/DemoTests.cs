@@ -272,6 +272,8 @@ namespace Determination.Demo
 
         #region Card Game
 
+        #region Card Struct and CardGame class
+
         internal enum Suit { Clubs, Diamonds, Hearts, Spades }
 
         internal enum Rank { Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King }
@@ -314,6 +316,9 @@ namespace Determination.Demo
             /// <summary>
             /// Initializes a new instance of the <see cref="CardGame"></see> class.
             /// </summary>
+            /// <param name="valueProvider">
+            /// Provides <see cref="Card"/> instances.
+            /// </param>
             public CardGame(IValueProvider<Card> valueProvider)
             {
                 _valueProvider = valueProvider;
@@ -358,7 +363,8 @@ namespace Determination.Demo
             /// <see cref="GetCard1"/> method is invoked when there are no cards remaining.
             /// </para>
             /// <para>
-            /// b) To fully test that the <see cref="RemainingCards"/> property no longer contains the
+            /// b) To fully test that the after the <see cref="GetCard1"/> method is invoked then
+            /// the <see cref="RemainingCards"/> property no longer contains the
             /// card returned it is necessary to test against every possible card.
             /// </para>
             /// <para>
@@ -375,7 +381,7 @@ namespace Determination.Demo
             {
                 if (!RemainingCards.Any())
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
-                Card card              = default;
+                Card card = default;
                 bool continueSelecting = true;
                 while (continueSelecting)
                 {
@@ -392,9 +398,6 @@ namespace Determination.Demo
             /// <summary>
             /// Returns one card from the cards remaining in a set of cards.
             /// </summary>
-            /// <param name="valueProvider">
-            /// Provides <see cref="Card"/> instances.
-            /// </param>
             /// <remarks>
             /// <para>
             /// Rules that should be verified for this method:
@@ -417,7 +420,7 @@ namespace Determination.Demo
             /// a) It is possible to set the <see cref="RemainingCards"/> property to an
             /// empty sequence by using the method to retrieve all possible cards.  All
             /// possible cards can be retrieved via the <paramref name="valueProvider"/>
-            /// argument.
+            /// argument in the <see cref="CardGame"/> class constructor.
             /// </para>
             /// <para>
             /// b) It is possible to fully test that the <see cref="RemainingCards"/> 
@@ -433,7 +436,7 @@ namespace Determination.Demo
             {
                 if (!RemainingCards.Any())
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
-                Card card              = default;
+                Card card = default;
                 bool continueSelecting = true;
                 while (continueSelecting)
                 {
@@ -461,7 +464,7 @@ namespace Determination.Demo
             {
                 Rank randomRank = (Rank)_RANDOM.Next((int)Min<Rank>(), Count<Rank>() + 1);
                 Suit randomSuit = (Suit)_RANDOM.Next((int)Min<Suit>(), Count<Suit>() + 1);
-                Card card = new Card(randomRank, randomSuit);
+                Card card       = new Card(randomRank, randomSuit);
                 return card;
             }
 
@@ -470,13 +473,16 @@ namespace Determination.Demo
             private static int Count<T>() where T : struct, Enum => Enum.GetNames(typeof(T)).Length;
         }
 
+        #endregion Card Struct and CardGame class
+
         #region CardGame Tests
 
         [Test]
         [Category("2 - Demo - Randomization - CardGame Tests")]
         // If the GetCard2() method is invoked and there are no cards remaining then an
-        // InvalidOperationException is thrown.
-        public void Test1()
+        // InvalidOperationException should be thrown.
+        // InvalidOperationException: There are no cards remaining to dispurse.
+        public void WhenCardsRemainingPropertyIsEmptyAndTheGetCard2MethodIsInvoked_ThenAnInvalidOperationExceptionIsThrown()
         {
             Card[] allCards = Enum.GetValues(typeof(Rank))
                                   .Cast<Rank>()
@@ -485,16 +491,19 @@ namespace Determination.Demo
                                                           .Select(suit => new Card(rank, suit)))
                                   .ToArray();
             CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
-            for (int i = 0; i < allCards.Length; i++)
-                _ = cardGame.GetCard2();
-            Assert.Throws<InvalidOperationException>(() => cardGame.GetCard2());
+            for (int i = 0; i < allCards.Length; i++)                                   // After the last iteration of this
+                _ = cardGame.GetCard2();                                                // loop there will be no cards remaining.
+
+            Assert.Throws<InvalidOperationException>(() => cardGame.GetCard2());        // Attempting to get a card when there
+                                                                                        // are no cards remaining should throw
+                                                                                        // an exception.
         }
 
         [Test]
         [Category("2 - Demo - Randomization - CardGame Tests")]
         // After a card is retrieved by the GetCard2() method the RemainingCards
         // property must no longer contain the card retrieved.
-        public void Test2()
+        public void WhenACardIsRetrievedByInvokingTheGetCard2Method_ThenTheCardIsNoLongerContainedInTheRemainingCardsSet()
         {
             Card[] allCards = Enum.GetValues(typeof(Rank))
                                   .Cast<Rank>()
@@ -514,7 +523,7 @@ namespace Determination.Demo
         [Category("2 - Demo - Randomization - CardGame Tests")]
         // After all cards have been retrieved by the GetCard2() method the RemainingCards
         // property must be empty.
-        public void Test3()
+        public void WhenAllCardsHaveBeenRetrievedByInvokingTheGetCard2Method_ThenTheRemainingCardsPropertyIsEmpty()
         {
             Card[] allCards = Enum.GetValues(typeof(Rank))
                                   .Cast<Rank>()
