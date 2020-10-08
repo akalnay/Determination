@@ -1,13 +1,9 @@
 # Determination #
 The objective of the `Determination` library is to provide determinism to unit tests.  [Wikipedia](https://en.wikipedia.org/wiki/Main_Page) defines a deterministic algorithm as [*an algorithm which, given a particular input, will always produce the same output, with the underlying machine always passing through the same sequence of states*](https://en.wikipedia.org/wiki/Deterministic_algorithm).
 
-Good unit tests are repeatable, they always produce the same results from a fixed set of inputs.  Intuitively, this makes a lot of sense but it can be challenging to achieve in real practice: a program may use the current date-time somewhere in its logic, or use a [`Globally Unique Identifiers`](https://en.wikipedia.org/wiki/Universally_unique_identifier) to provide uniqueness to an object, or perhaps use randomization.  All of those are examples of values that will be different everytime a program runs, but testing any logic that depends on those values requires the values to be consistent for each test iteration.
+Good unit tests are repeatable, they always produce the same results from a fixed set of inputs.  Intuitively, this makes a lot of sense but it can be challenging to achieve in real practice: for example a program may use the current date-time somewhere in its logic, or use a [`Globally Unique Identifiers`](https://en.wikipedia.org/wiki/Universally_unique_identifier) to provide uniqueness to an object, or perhaps use randomization.  All of those are examples of values that will be different everytime a program runs, but testing any logic that depends on those values requires the values to be consistent for each test iteration.
 
-In addition to being repeatable, unit tests are also expected to run quickly; this can also be challenge when dealing with dates and times
-because sometimes a program may willfully introduce a delay on the execution of its logic.  The problem here is that while the delay
-may be needed for the execution of a given algorithm, that delay will also cause a test to slowdown to what may become an unacceptable level.
-For example, if a program introduces a 1 second delay for the execution of a loop, and the loop is expected to have 60 iterations, now any
-tests that require execution of the loop will be one minute slower.  And if there are multiple iterations of the test because the test requires different combinations of testing parameters, then the slowdown will be an order of magnitude greater than that.
+In addition to being repeatable, unit tests are also expected to run quickly.  A program may willfully introduce a delay to the execution of its logic; that delay that might be desirable in a production environment will have a detrimental impact on how swiftly tests execute.
 
 Solving these challenges might seem easy at first:  just provide actual values when a program runs, and substitute those values with a pre-defined one when running unit tests.  That solution can work for many cases but not all as sometimes a test might need to be provided with a sequence of values.
 
