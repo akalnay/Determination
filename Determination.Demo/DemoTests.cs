@@ -272,7 +272,7 @@ namespace Determination.Demo
 
         #region Card Game
 
-        #region Card Struct and CardGame class
+        #region Card struct and CardGame class
 
         internal enum Suit { Clubs, Diamonds, Hearts, Spades }
 
@@ -383,9 +383,9 @@ namespace Determination.Demo
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
                 Card card              = default;
                 bool continueSelecting = true;
-                while (continueSelecting)
-                {
-                    card = SelectRandomCard();
+                while (continueSelecting)               // Continue looping until the selected card is
+                {                                       // one that hasn't been selected before.
+                    card = SelectRandomCard();          // Select a random card.
                     if (RemainingCards.Contains(card))
                     {
                         RemainingCards.Remove(card);
@@ -438,9 +438,12 @@ namespace Determination.Demo
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
                 Card card              = default;
                 bool continueSelecting = true;
-                while (continueSelecting)
-                {
-                    card = _valueProvider.Value;
+                while (continueSelecting)               // Continue looping until the selected card is
+                {                                       // one that hasn't been selected before.
+                    card = _valueProvider.Value;        // Select a card.  The card may or may not be
+                                                        // randomly selected depending on how the 
+                                                        // IValueProvider<Card> interface has been
+                                                        // implemented.
                     if (RemainingCards.Contains(card))
                     {
                         RemainingCards.Remove(card);
@@ -473,7 +476,7 @@ namespace Determination.Demo
             private static int Count<T>() where T : struct, Enum => Enum.GetNames(typeof(T)).Length;
         }
 
-        #endregion Card Struct and CardGame class
+        #endregion Card struct and CardGame class
 
         #region CardGame Tests
 
@@ -514,8 +517,11 @@ namespace Determination.Demo
             CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
             for (int i = 0; i < allCards.Length; i++)
             {
-                Card card = cardGame.GetCard2();
-                CollectionAssert.DoesNotContain(cardGame.RemainingCards, card);
+                Card card = cardGame.GetCard2();                                        // Retrieve one card.
+
+                CollectionAssert.DoesNotContain(cardGame.RemainingCards, card);         // Verify that the card retrieved is no
+                                                                                        // longer contained in the RemainingCards
+                                                                                        // set.
             }
         }
 
@@ -525,14 +531,15 @@ namespace Determination.Demo
         // property must be empty.
         public void WhenAllCardsHaveBeenRetrievedByInvokingTheGetCard2Method_ThenTheRemainingCardsPropertyIsEmpty()
         {
-            Card[] allCards   = GetAllCards();
+            Card[] allCards = GetAllCards();
             CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
             for (int i = 0; i < allCards.Length; i++)                                   // After the last iteration of this
                 _ = cardGame.GetCard2();                                                // loop there will be no cards remaining.
 
             CollectionAssert.IsEmpty(cardGame.RemainingCards);                          // RemainingCards property must be
-        }                                                                               // empty at this point.
-                                                                                        
+                                                                                        // empty at this point.
+        }
+        
         #endregion CardGame Tests                                                       
 
         #endregion Card Game
