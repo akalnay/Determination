@@ -262,10 +262,14 @@ public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemaining
 #endregion Tests for the CountdownTimer class
 ```
 ### Card Game
-This example shows how to use the `Determination` library to test software that depends on randomized values.  The CardGame class in the example has very simple functionality:  it allows a user to randomly retrieve a card from a set of cards.  There are three rules that must be verified when a card is retrieved:  
-1. That there are still cards available to retrieve.
-2. That after the card is retrieved that same card can't be retrieved again.
-3. That after all possible cards have been retrieved the class property `RemainingCards` is empty.
+This example shows how to use the `Determination` API to test software that uses randomization.  The CardGame class in the example has very simple functionality:  it allows a user to randomly retrieve a card from a set of cards.
+ 
+There is one rule that must be verified before a card is retrieved:  
+1. That there are still cards available to retrieve.  
+
+And there are two rules that must be verified after a card is retrieved:
+1. That after the card is retrieved that same card can't be retrieved again.
+2. That after all possible cards have been retrieved the class property `RemainingCards` is empty.
 ```C#
 #region Card struct and CardGame class
 
