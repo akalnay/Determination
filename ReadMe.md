@@ -8,8 +8,12 @@ In addition to being repeatable, unit tests are also expected to run quickly.  A
 In addition to improving testability, the `Determination` API brings in one additional benefit:  it allows flexibility in choosing how a given algorithm is implemented.  For example `.NET` offers a couple of mechanisms for randomization:  there is the [System.Random](https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netcore-3.1) class and also the [System.Security.Cryptography.RNGCryptoServiceProvider](https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.rngcryptoserviceprovider?view=netcore-3.1) class.  The `Determination` library allows a software developer to easily change how the randomization is implemented for production software and to also provide deterministic values for unit testing.
 
 ## Examples
+1. [Dates and Times](#dates-and-times)
+2. [Randomization](#randomization)
 
-### GetTodaysDateAsText()
+### Dates and Times
+
+#### Get Todays Date As Text
 ```C#
 // Untestable version of a method that returns the current date as a text string formatted as
 // "yyyy/MM/dd".  In this method the date is provided directly by the operating system making
@@ -38,7 +42,7 @@ public void WhenTheGetTodaysDateAsTextMethodIsInvoked_ThenTheResultIsTodaysDateF
     Assert.AreEqual("2020/10/02", GetTodaysDateAsText(CurrentDateTimeProviderStub.Create(new DateTime(2020, 10, 2))));
 }
 ```
-### IsItTeaTime()
+#### Determine if a date falls within a range
 ```C#
 // Untestable version of a method to determine if the current date-time falls within a range.
 // The current date-time is provided directly by the operating system making the method
@@ -107,7 +111,7 @@ public void WhenTheIsItTeaTimeMethodRetrievesTheCurrentDateTimeValueMoreThanOnce
                                 new DateTime(2020, 10, 1, 18, 0, 0)));
 }
 ```
-### CountdownTimer
+#### Countdown Timer
 The CountdownTimer class gives functionality somewhat similar to that of a
 microwave oven's timer.  The functionality differs in that the timer in a microwave
 oven will countdown for a specified time (e.g. for one minute) whereas
@@ -261,7 +265,8 @@ public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemaining
 
 #endregion Tests for the CountdownTimer class
 ```
-### Card Game
+### Randomization
+#### Card Game
 This example shows how to use the `Determination` API to test software that uses randomization.  The CardGame class in the example has very simple functionality:  it allows a user to randomly retrieve a card from a set of cards.
 
 There is one rule that must be verified before a card is retrieved:  
