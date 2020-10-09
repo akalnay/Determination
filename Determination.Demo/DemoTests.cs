@@ -477,19 +477,24 @@ namespace Determination.Demo
 
         #region CardGame Tests
 
+        private static Card[] GetAllCards()
+        {
+            return Enum.GetValues(typeof(Rank))
+                       .Cast<Rank>()
+                       .SelectMany(rank => Enum.GetValues(typeof(Suit))
+                                               .Cast<Suit>()
+                                               .Select(suit => new Card(rank, suit)))
+                       .ToArray();
+        }
+
         [Test]
         [Category("2 - Demo - Randomization - CardGame Tests")]
-        // If the GetCard2() method is invoked and there are no cards remaining then an
+        // If the GetCard2() method is invoked when there are no cards remaining then an
         // InvalidOperationException should be thrown.
         // InvalidOperationException: There are no cards remaining to dispurse.
         public void WhenCardsRemainingPropertyIsEmptyAndTheGetCard2MethodIsInvoked_ThenAnInvalidOperationExceptionIsThrown()
         {
-            Card[] allCards = Enum.GetValues(typeof(Rank))
-                                  .Cast<Rank>()
-                                  .SelectMany(rank => Enum.GetValues(typeof(Suit))
-                                                          .Cast<Suit>()
-                                                          .Select(suit => new Card(rank, suit)))
-                                  .ToArray();
+            Card[] allCards   = GetAllCards();
             CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
             for (int i = 0; i < allCards.Length; i++)                                   // After the last iteration of this
                 _ = cardGame.GetCard2();                                                // loop there will be no cards remaining.
@@ -505,12 +510,7 @@ namespace Determination.Demo
         // property must no longer contain the card retrieved.
         public void WhenACardIsRetrievedByInvokingTheGetCard2Method_ThenTheCardIsNoLongerContainedInTheRemainingCardsSet()
         {
-            Card[] allCards = Enum.GetValues(typeof(Rank))
-                                  .Cast<Rank>()
-                                  .SelectMany(rank => Enum.GetValues(typeof(Suit))
-                                                          .Cast<Suit>()
-                                                          .Select(suit => new Card(rank, suit)))
-                                  .ToArray();
+            Card[] allCards   = GetAllCards();
             CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
             for (int i = 0; i < allCards.Length; i++)
             {
@@ -525,19 +525,15 @@ namespace Determination.Demo
         // property must be empty.
         public void WhenAllCardsHaveBeenRetrievedByInvokingTheGetCard2Method_ThenTheRemainingCardsPropertyIsEmpty()
         {
-            Card[] allCards = Enum.GetValues(typeof(Rank))
-                                  .Cast<Rank>()
-                                  .SelectMany(rank => Enum.GetValues(typeof(Suit))
-                                                          .Cast<Suit>()
-                                                          .Select(suit => new Card(rank, suit)))
-                                  .ToArray();
+            Card[] allCards   = GetAllCards();
             CardGame cardGame = new CardGame(ValueProviderStub.Create<Card>(allCards));
-            for (int i = 0; i < allCards.Length; i++)
-                _ = cardGame.GetCard2();
-            CollectionAssert.IsEmpty(cardGame.RemainingCards);
-        }
+            for (int i = 0; i < allCards.Length; i++)                                   // After the last iteration of this
+                _ = cardGame.GetCard2();                                                // loop there will be no cards remaining.
 
-        #endregion CardGame Tests
+            CollectionAssert.IsEmpty(cardGame.RemainingCards);                          // RemainingCards property must be
+        }                                                                               // empty at this point.
+                                                                                        
+        #endregion CardGame Tests                                                       
 
         #endregion Card Game
 
