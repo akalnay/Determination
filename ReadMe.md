@@ -267,6 +267,10 @@ public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemaining
 #endregion Tests for the CountdownTimer class
 ```
 ### Guid
+This example shows how to create software that uses Guid's to provide
+a unique identifier to an object instance.  The ```Determination``` API
+can provide a deterministic or non-deterministic Guid depending on the
+need.
 ```C#
 #region Person
 
