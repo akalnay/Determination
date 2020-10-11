@@ -286,7 +286,7 @@ public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemaining
 ```
 ### Guid
 This example shows how to create software that uses Guid's to provide
-a unique identifier to an object instance.  The ```Determination``` API
+a unique identifier to an object.  The ```Determination``` API
 can provide a deterministic or non-deterministic Guid depending on the
 need.
 ```C#
