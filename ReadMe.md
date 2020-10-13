@@ -680,6 +680,7 @@ public sealed class DeciderTests
 {
     [TestCase(DecisionKind.RandomStandard)]
     [TestCase(DecisionKind.RandomCrypto)]
+    [Category("2 - Demo - Randomization - Decider Tests")]
     // Determines that when the Decider.Decide() method is invoked
     // an exception is not thrown.
     public void WhenTheDecideMethodIsInvoked_ThenAnExceptionIsNotThrown(DecisionKind decisionKind)
