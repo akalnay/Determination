@@ -11,7 +11,7 @@ namespace Determination.Demo
         #region Test a method that depends on the current date
 
         // SUT
-        internal string GetTodaysDateAsText(ICurrentDateTimeProvider currentDateTimeProvider)
+        internal static string GetTodaysDateAsText(ICurrentDateTimeProvider currentDateTimeProvider)
         {
             return currentDateTimeProvider.Value.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
         }
@@ -36,7 +36,7 @@ namespace Determination.Demo
         // A method to determine if the current date-time falls within a range.
         // The IsItTeaTime1() method stores the current date-time value being provided into a local variable and then
         // uses the stored value for its calculation.
-        internal bool IsItTeaTime1(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
+        internal static bool IsItTeaTime1(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
         {
             DateTime now = currentDateTimeProvider.Value;
             return now >= startDateTime && now <= endDateTime;
@@ -47,7 +47,7 @@ namespace Determination.Demo
         // required range, whereas the second time it is retrieved it falls outside of the range.
         // If the currentDateTimeProvider argument does not provide more than one DateTime then an InvalidOperationException
         // will be thrown.
-        internal bool IsItTeaTime2(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
+        internal static bool IsItTeaTime2(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)
         {
             return currentDateTimeProvider.Value >= startDateTime && currentDateTimeProvider.Value <= endDateTime;
         }

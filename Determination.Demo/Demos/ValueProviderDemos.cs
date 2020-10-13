@@ -1,7 +1,13 @@
-﻿using NUnit.Framework;
+﻿////////////////////////////////////////////////////////
+// Copyright (c) Alejandro Kalnay                     //
+// License: GNU GPLv3                                 //
+////////////////////////////////////////////////////////
+
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Determination.Demo
 {
@@ -118,7 +124,7 @@ namespace Determination.Demo
             {
                 if (!RemainingCards.Any())
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
-                Card card = default;
+                Card card              = default;
                 bool continueSelecting = true;
                 while (continueSelecting)               // Continue looping until the selected card is
                 {                                       // one that hasn't been selected before.
@@ -173,7 +179,7 @@ namespace Determination.Demo
             {
                 if (!RemainingCards.Any())
                     throw new InvalidOperationException("There are no cards remaining to dispurse.");
-                Card card = default;
+                Card card              = default;
                 bool continueSelecting = true;
                 while (continueSelecting)               // Continue looping until the selected card is
                 {                                       // one that hasn't been selected before.
@@ -190,7 +196,7 @@ namespace Determination.Demo
                 return card;
             }
 
-            private IEnumerable<Card> GetAllCards()
+            private static IEnumerable<Card> GetAllCards()
             {
                 IEnumerable<Card> allCards = Enum.GetValues(typeof(Rank))
                                                  .Cast<Rank>()
@@ -200,7 +206,7 @@ namespace Determination.Demo
                 return allCards;
             }
 
-            private Card SelectRandomCard()
+            private static Card SelectRandomCard()
             {
                 Rank randomRank = (Rank)_RANDOM.Next((int)Min<Rank>(), Count<Rank>() + 1);
                 Suit randomSuit = (Suit)_RANDOM.Next((int)Min<Suit>(), Count<Suit>() + 1);
@@ -280,5 +286,83 @@ namespace Determination.Demo
         #endregion CardGame Tests                                                       
 
         #endregion Card Game
+
+        #region Direction Manager
+
+        #region DirectionManager Class
+
+        internal enum Direction { Up = 1, Right, Down, Left }
+
+        internal class DirectionManager
+        {
+            private readonly IValueProvider<Direction> _valueProvider;
+
+            public DirectionManager(IValueProvider<Direction> valueProvider)
+            {
+                _valueProvider = valueProvider;
+            }
+
+            /// <summary>
+            /// Returns a random <see cref="Direction"/>
+            /// </summary>
+            /// <returns>A random <see cref="Direction"/></returns>
+            public Direction GetNextRandomDirection() => _valueProvider.Value;
+        }
+
+        #endregion DirectionManager Class
+
+        #region DirectionManager Tests
+
+        private static T Min<T>() where T : struct, Enum => Enum.GetValues(typeof(T)).Cast<T>().Min();
+
+        private static int Count<T>() where T : struct, Enum => Enum.GetNames(typeof(T)).Length;
+
+        [Test]
+        [Category("2 - Demo - Randomization - DirectionManager Tests")]
+        public void Test1()
+        {
+            Random random = new Random();
+            Direction getValue() => (Direction)random.Next((int)Min<Direction>(), Count<Direction>() + 1);
+
+            IValueProvider<Direction> valueProvider = ValueProvider.Create<Direction>(getValue);
+            DirectionManager directionManager = new DirectionManager(valueProvider);
+            Assert.DoesNotThrow(() => directionManager.GetNextRandomDirection());
+        }
+
+        [Test]
+        [Category("2 - Demo - Randomization - DirectionManager Tests")]
+        public void Test2()
+        {
+            static int Next(RNGCryptoServiceProvider rngCryptoServiceProvider, int minimum, int maximum)
+            {
+                const int byteCount = 4;
+                byte[] bytes = new byte[byteCount];
+                rngCryptoServiceProvider.GetBytes(bytes);
+                UInt32 scale = BitConverter.ToUInt32(bytes, 0);
+                return (int)(minimum + (maximum - minimum) * (scale / (uint.MaxValue + 1.0)));
+            }
+
+            using (RNGCryptoServiceProvider rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            {
+                Direction getValue() => (Direction)Next(rngCryptoServiceProvider, (int)Min<Direction>(), Count<Direction>() + 1);
+                IValueProvider<Direction> valueProvider = ValueProvider.Create<Direction>(getValue);
+                DirectionManager directionManager = new DirectionManager(valueProvider);
+                Assert.DoesNotThrow(() => directionManager.GetNextRandomDirection());
+            }
+        }
+
+        [Test]
+        [Category("2 - Demo - Randomization - DirectionManager Tests")]
+        public void Test3()
+        {
+            IValueProvider<Direction> valueProvider = ValueProviderStub.Create(Direction.Left, Direction.Down);
+            DirectionManager directionManager = new DirectionManager(valueProvider);
+            Assert.DoesNotThrow(() => directionManager.GetNextRandomDirection());
+        }
+
+
+        #endregion DirectionManager Tests
+
+        #endregion Direction Manager
     }
 }

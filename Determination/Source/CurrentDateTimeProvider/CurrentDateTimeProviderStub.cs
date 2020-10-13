@@ -49,7 +49,7 @@ namespace Determination
         public static CurrentDateTimeProviderStub Create(params DateTime[] values)
         {
             if (values == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(values));
             if (values.Length < 1)
                 throw new ArgumentException($"{nameof(values)} array is empty.");
             return new CurrentDateTimeProviderStub(values);
