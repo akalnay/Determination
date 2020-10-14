@@ -31,8 +31,11 @@ Looking at the examples below should help make things clearer.
 3. [Randomization](#randomization)
 
 ### Dates and Times
+1. [Get Today's Date As Text](#get-todays-date-as-text)
+2. [Determine if a date falls within a range](#determine-if-a-date-falls-within-a-range)
+3. [Countdown Timer](#countdown-timer)
 
-#### Get Todays Date As Text
+#### Get Today's Date As Text
 ```C#
 // Untestable version of a method that returns the current date as a text string formatted as
 // "yyyy/MM/dd".  In this method the date is provided directly by the operating system making
@@ -339,6 +342,9 @@ public void WhenTheGuidPropertyOfAPersonInstanceIsRetrieved_ThenItsValueIsTheGui
 }
 ```
 ### Randomization
+1. [Card Gate](#card-game)
+2. [Decider](#decider)
+
 #### Card Game
 This example shows how to use the `Determination` API to test software that uses randomization.  The CardGame class in the example has very simple functionality:  it allows a user to randomly retrieve a card from a set of cards.
 
@@ -689,5 +695,3 @@ public sealed class DeciderTests
     }
 }
 ```
-
-

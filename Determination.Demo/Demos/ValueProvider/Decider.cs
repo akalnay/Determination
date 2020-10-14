@@ -1,4 +1,9 @@
-﻿using NUnit.Framework;
+﻿////////////////////////////////////////////////////////
+// Copyright (c) Alejandro Kalnay                     //
+// License: GNU GPLv3                                 //
+////////////////////////////////////////////////////////
+
+using NUnit.Framework;
 using System;
 using System.Security.Cryptography;
 
@@ -27,7 +32,7 @@ namespace Determination.Demo
 
         private static int Next(RNGCryptoServiceProvider rngCryptoServiceProvider, int minimum, int maximum)
         {
-            const int byteCount = 4;
+            const int byteCount = sizeof(int);
             byte[] bytes = new byte[byteCount];
             rngCryptoServiceProvider.GetBytes(bytes);
             UInt32 scale = BitConverter.ToUInt32(bytes, 0);
