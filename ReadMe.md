@@ -342,7 +342,7 @@ public void WhenTheGuidPropertyOfAPersonInstanceIsRetrieved_ThenItsValueIsTheGui
 }
 ```
 ### Randomization
-1. [Card Gate](#card-game)
+1. [Card Game](#card-game)
 2. [Decider](#decider)
 
 #### Card Game
