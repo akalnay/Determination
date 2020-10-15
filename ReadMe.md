@@ -644,7 +644,7 @@ internal class Decider
     private static readonly Random _RANDOM                                     = new Random();
     private static readonly RNGCryptoServiceProvider _RNGCRYPTOSERVICEPROVIDER = new RNGCryptoServiceProvider();
     private static readonly IValueProvider<bool> _VALUEPROVIDERRANDOMSTANDARD  = ValueProvider.Create(GetNextRandomStandardValue);
-    private static readonly IValueProvider<bool> _VALUEPROVIDERRANDOMCRYPTO    = ValueProvider.Create(GetNextRandomStandardValue);
+    private static readonly IValueProvider<bool> _VALUEPROVIDERRANDOMCRYPTO    = ValueProvider.Create(GetNextRandomCryptoValue);
 
     private static bool GetNextRandomStandardValue() => Convert.ToBoolean(_RANDOM.Next(0, 2));
 
@@ -652,7 +652,7 @@ internal class Decider
 
     private static int Next(RNGCryptoServiceProvider rngCryptoServiceProvider, int minimum, int maximum)
     {
-        const int byteCount = 4;
+        const int byteCount = sizeof(int);
         byte[] bytes = new byte[byteCount];
         rngCryptoServiceProvider.GetBytes(bytes);
         UInt32 scale = BitConverter.ToUInt32(bytes, 0);

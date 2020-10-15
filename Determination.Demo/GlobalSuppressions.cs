@@ -9,3 +9,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:Determination.Demo.GuidProviderDemos.WhenTheGuidPropertyOfAPersonInstanceIsRetrieved_ThenItsValueIsTheGuidAssignedDuringTheCreationOfTheInstance")]
 [assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "type", Target = "~T:Determination.Demo.CountdownTimer_Tests")]
 [assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "type", Target = "~T:Determination.Demo.Demos.ValueProvider.CardGame_Tests")]
+[assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "type", Target = "~T:Determination.Demo.RandomizationValidator_Tests")]

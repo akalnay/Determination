@@ -24,7 +24,7 @@ namespace Determination.Demo
         private static readonly Random _RANDOM                                     = new Random();
         private static readonly RNGCryptoServiceProvider _RNGCRYPTOSERVICEPROVIDER = new RNGCryptoServiceProvider();
         private static readonly IValueProvider<bool> _VALUEPROVIDERRANDOMSTANDARD  = ValueProvider.Create(GetNextRandomStandardValue);
-        private static readonly IValueProvider<bool> _VALUEPROVIDERRANDOMCRYPTO    = ValueProvider.Create(GetNextRandomStandardValue);
+        private static readonly IValueProvider<bool> _VALUEPROVIDERRANDOMCRYPTO    = ValueProvider.Create(GetNextRandomCryptoValue);
 
         private static bool GetNextRandomStandardValue() => Convert.ToBoolean(_RANDOM.Next(0, 2));
 
