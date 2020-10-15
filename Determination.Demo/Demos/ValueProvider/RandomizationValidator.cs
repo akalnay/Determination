@@ -124,8 +124,8 @@ namespace Determination.Demo
             }
         }
 
-        [TestCase(RandomizationKind.RandomStandard, 1, 101, 1000_000, 10)]
-        [TestCase(RandomizationKind.RandomCrypto,   1, 101, 1000_000, 10)]
+        [TestCase(RandomizationKind.RandomStandard, 1, 101, 1_000_000, 10)]
+        [TestCase(RandomizationKind.RandomCrypto,   1, 101, 1_000_000, 10)]
         [Category("2 - Demo - Randomization - RandomizationValidator Tests")]
         // This test validates the evenness of the distribution of
         // randomly generated values.
@@ -134,7 +134,7 @@ namespace Determination.Demo
         // the number of random values generated; the test might
         // fail with a small number of iterations and succeed with
         // a larger number of iterations.
-        public void Test3(RandomizationKind randomizationKind, int minValue, int maxValue, int iterations, float maxDeviation)
+        public void Test3(RandomizationKind randomizationKind, int minValue, int maxValue, int iterations, float maxDeviationPercent)
         {
             static Dictionary<int, int> GetDictionary(int minValue, int entryCount)
             {
@@ -144,7 +144,7 @@ namespace Determination.Demo
                 return dictionary;
             }
 
-            static void RandomizeValues(Dictionary<int, int> dictionary, int iterations, RandomizationValidator randomizationValidator)
+            static void RandomizeValues(RandomizationValidator randomizationValidator, Dictionary<int, int> dictionary, int iterations)
             {
                 for (int i = 1; i <= iterations; i++)
                 {
@@ -157,11 +157,11 @@ namespace Determination.Demo
             int entryCount                                = maxValue - minValue;
             Dictionary<int, int> dictionary               = GetDictionary(minValue, entryCount);
             RandomizationValidator randomizationValidator = new RandomizationValidator(randomizationKind, minValue, maxValue);
-            RandomizeValues(dictionary, iterations, randomizationValidator);
+            RandomizeValues(randomizationValidator, dictionary, iterations);
             int minFrequency          = dictionary.Values.Min();
             int maxFrequency          = dictionary.Values.Max();
             float perfectFrequency    = iterations / (float)entryCount;
-            float allowedFrequency    = perfectFrequency * maxDeviation / 100;
+            float allowedFrequency    = perfectFrequency * maxDeviationPercent / 100;
             float minAllowedFrequency = perfectFrequency - allowedFrequency;
             float maxAllowedFrequency = perfectFrequency + allowedFrequency;
             Assert.GreaterOrEqual(minFrequency, minAllowedFrequency);
