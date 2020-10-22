@@ -22,7 +22,9 @@ namespace Determination.Demo
         [Test]
         [Category("2 - Demo - CurrentDateTimeProvider - GetTodaysDateAsText Tests")]
         // This test provides a consistent date-time value to the method being tested. The test will
-        // always provide the same result regardless of when it runs.
+        // always provide the same result regardless of when it runs.  The test passes if the value
+        // returned by the GetTodaysDate() method is the expected text representation of the date
+        // provided.
         public static void WhenTheGetTodaysDateAsTextMethodIsInvoked_ThenTheResultIsTodaysDateFormatedAsAStringWithTheFormatYearMonthDay()
         {
             // A real program might retrieve the date from the operating system by using:

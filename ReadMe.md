@@ -40,9 +40,21 @@ Looking at the examples below should help make things clearer.
 ### Dates and Times
 1. [Get Today's Date As Text](#get-todays-date-as-text)
 2. [Determine if a date falls within a range](#determine-if-a-date-falls-within-a-range)
-3. [Countdown Timer](#countdown-timer)
+3. [Countdown Timer](#countdown-timer)  
+[&uarr;](#examples)
+#### **Get Today's Date As Text**
 
-#### Get Today's Date As Text
+This example shows how to verify a method (`GetTodaysDateAsText`) that returns the current date as a text string in the format *'four-digit year / two-digit month / two-digit day'*.  The example highlights the following:
+1. Testable vs. non-testable code.  
+Two overloads are provided for the `GetTodaysDateAsText` method: one of the overloads can't be tested with unit tests while the other one can.  
+    1. The method overload `GetTodaysDateAsText()` is not testable because the method's logic obtains the current date-time internally.  There is no way for testing code to supply a value to use as a substitute for the current date-time.  The method is not deterministic because everytime it is invoked it will return a different value.
+    2. The method overload `GetTodaysDateAsText(ICurrentDateTimeProvider currentDateTimeProvider)` is testable.  The method accesses the `Value` property in the `currentDateTimeProvider` parameter to obtain the current's date-time value.  The method may or may not be deterministic depending on the class used to implement the `ICurrentDateTimeProvider` interface type of the `currentDateTimeProvider` parameter.  
+2. Implementations of the `ICurrentDateTimeProvider` interface:  
+    1. The `CurrentDateTimeProvider` class.  
+        This class acts as a proxy to `System.DateTime`; this class should be used when writing code that will run in a production environment.  Accessing the `Value` property in an instance of this class is equivalent to accessing the `Now` property of the `DateTime` class.  Accessing the `Value` property of the `CurrentDateTimeProvider` instance will always return a different value:  the current date-time.  
+    2. The `CurrentDateTimeProviderStub` class.  
+        This class is for testing code that depends on the current date-time, as in the example being shown here.  Accessing the `Value` property in an instance of this class returns the date-time provided when the `CurrentDateTimeProviderStub` class instance was created.  Note that accessing the `Value` property more than once will throw an `InvalidOperationException` if only one value was provided while creating the `CurrentDateTimeProviderStub` instance.  This is by design and it is to highlight the fact that the current date-time constantly changes. If more than one date-time will be needed then more than one date-time should be provided when creating the `CurrentDateTimeProviderStub` instance.
+
 ```C#
 // Untestable version of a method that returns the current date as a text string formatted as
 // "yyyy/MM/dd".  In this method the date is provided directly by the operating system making
@@ -62,8 +74,10 @@ public string GetTodaysDateAsText(ICurrentDateTimeProvider currentDateTimeProvid
 }
 
 [Test]
-// This test provides a consistent date-time value to the method being tested. The test will 
-// always provide the same result regardless of when it runs.
+// This test provides a consistent date-time value to the method being tested. The test will
+// always provide the same result regardless of when it runs.  The test passes if the value
+// returned by the GetTodaysDate() method is the expected text representation of the date
+// provided.
 public void WhenTheGetTodaysDateAsTextMethodIsInvoked_ThenTheResultIsTodaysDateFormatedAsAStringWithTheFormatYearMonthDay()
 {
     // A real program might retrieve the date from the operating system by using:
@@ -71,7 +85,21 @@ public void WhenTheGetTodaysDateAsTextMethodIsInvoked_ThenTheResultIsTodaysDateF
     Assert.AreEqual("2020/10/02", GetTodaysDateAsText(CurrentDateTimeProviderStub.Create(new DateTime(2020, 10, 2))));
 }
 ```
-#### Determine if a date falls within a range
+[&uarr;](#dates-and-times)
+#### **Determine if a date falls within a range**
+
+This example shows how to verify a method that determines if the current date-time falls within a provided range.  The example shows three methods which while being slightly different they all have the same intent:  
+1. `IsItTeaTime1(DateTime startDateTime, DateTime endDateTime)`  
+This method is not testable because the method's logic obtains the current date-time internally. There is no way for testing code to supply a value to use as a substitute for the current date-time. The method is not deterministic because when invoked it might return different values.  
+2. `IsItTeaTime1(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)`
+This method can be tested with unit tests.  Two items are of note here:  
+    1. The method only retrieves the current date-time once.  The retrieved value is stored in a local variable which is then used for its calculations.
+    2. Two date-time values are provided when creating the `CurrentDateTimeProviderStub` class instance.  However only one of the provided values will be used by the `IsItTeaTime1` method.
+3. `IsItTeaTime2(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)`).
+This method can also be tested with unit tests.  Two items are of note here:  
+    1. This method retrieves the current date-time twice.  This introduces a slight bug in the method's logic:  it is possible that when the current date time is retrieved for the first time the value falls within the required range, whereas when it is retrieved a second time it falls outside of the range.
+    2. Two date-time values are provided when creating the `CurrentDateTimeProviderStub` class instance; the first value provided falls within the date-time range being tested while the second value falls outside the range.  This will cause the method's calculation to fail and the method will produce an erroneous result.
+
 ```C#
 // Untestable version of a method to determine if the current date-time falls within a range.
 // The current date-time is provided directly by the operating system making the method
@@ -140,11 +168,11 @@ public void WhenTheIsItTeaTimeMethodRetrievesTheCurrentDateTimeValueMoreThanOnce
                                 new DateTime(2020, 10, 1, 18, 0, 0)));
 }
 ```
+[&uarr;](#dates-and-times)
 #### Countdown Timer
-The CountdownTimer class gives functionality somewhat similar to that of a
-microwave oven's timer.  The functionality differs in that the timer in a microwave
-oven will countdown for a specified time (e.g. for one minute) whereas
-the CountdownTimer will count down until a specified date-time is reached.
+The CountdownTimer class gives functionality somewhat similar to that of a microwave oven's timer.  The functionality differs in that the timer in a microwave oven will countdown for a specified time (e.g. for one minute) whereas the CountdownTimer will count down until a specified date-time is reached.  
+
+The example uses the `Determination` API to test if the countdown timer runs for its designated time.
 ```C#
 #region CountdownTimer Class
 
@@ -294,11 +322,11 @@ public async Task WhenTheCountdownTimerEventLoopElapsedIsRaised_ThenTheRemaining
 
 #endregion Tests for the CountdownTimer class
 ```
+[&uarr;](#dates-and-times)
 ### Guid
-This example shows how to create software that uses Guid's to provide
-a unique identifier to an object.  The ```Determination``` API
-can provide a deterministic or non-deterministic Guid depending on the
-need.
+This example shows how to create software that uses Guid's to provide a unique identifier to an object.
+
+The ```Determination``` API can provide a deterministic or non-deterministic Guid depending on the need:  for production software a non-deterministic Guid can be obtained by creating an instance of the `GuidProvider` class.  For testing purposes, the `GuidProviderStub` class can provide a deterministic Guid value that will be consistent every time tests are run.
 ```C#
 #region Person
 
@@ -348,19 +376,20 @@ public void WhenTheGuidPropertyOfAPersonInstanceIsRetrieved_ThenItsValueIsTheGui
                                             // is the pre-defined Guid value.
 }
 ```
+[&uarr;](#guid)
 ### Randomization
 1. [Card Game](#card-game)
 2. [Decider](#decider)
 
 #### Card Game
-This example shows how to use the `Determination` API to test software that uses randomization.  The CardGame class in the example has very simple functionality:  it allows a user to randomly retrieve a card from a set of cards.
+This example shows how to use the `Determination` API to test software that uses randomization.  The CardGame class in the example has very simple functionality:  it allows a user to randomly retrieve a card from a set of cards.  Tests must run before and after a card is retrieved:
 
-There is one rule that must be verified before a card is retrieved:  
-1. That there are still cards available to retrieve.  
+1. Before a card is retrieved:  
+    1. The test must determine that there are still cards available to retrieve.  
 
-And there are two rules that must be verified after a card is retrieved:
-1. That after the card is retrieved that same card can't be retrieved again.
-2. That after all possible cards have been retrieved the class property `RemainingCards` is empty.
+2.  After a a card is retrieved:
+    1. That after the card is retrieved that same card can't be retrieved again.
+    2. That after all possible cards have been retrieved the class property `RemainingCards` is empty.
 ```C#
 #region Card struct and CardGame class
 
@@ -632,6 +661,7 @@ public void WhenAllCardsHaveBeenRetrievedByInvokingTheGetCard2Method_ThenTheRema
 
 #endregion CardGame Tests                                                      
 ```
+[&uarr;](#guid)
 #### Decider
 
 This example demonstrates using the `Determination` API to determine which implementation of a random number generator should be used.
@@ -702,7 +732,23 @@ public sealed class DeciderTests
     }
 }
 ```
+[&uarr;](#guid)
 #### Non-Determinism
+This example shows that there are certain algorithms that can't be proven, for example randomization.  
+
+1. For a test to determine if the randomization algorithm produces integer values within a range, and only within that range:
+    1. Given enough iterations the test may indicate that all the expected integer values within the range were obtained, however it is impossible to assert how many iterations it will take to produce the expected values.
+    2. It is impossible to determine if at some point in the future the algorithm will return a random value that falls outside the range.
+    3. For a test that uses a timer to stop the test after a certain time, a failing test does not prove that the algorithm is faulty, it only proves that the algorithm was not capable of producting all the expected values within that time.
+
+    Note that while it is impossible to create deterministic tests here, the `Determination` API can still be useful in proving that the test passes when all possible expected values have been generated.
+
+2. For a test to determine if the values produced by the randomization algorithm are evenly distributed:
+    1.  It is possible that the distribution of values is affected by the number of random values generated:  a large number of random values might be more evenly distributed that a smaller number of random values.
+
+    Note that while it is impossible to create deterministic tests here, the `Determination` API can still be useful in proving that the test passes when the values generated have been randomly distributed and that it fails when they were not.
+
+[&uarr;](#guid)
 ```C#
 public enum RandomizationKind { RandomStandard, RandomCrypto }
 
@@ -859,3 +905,5 @@ public class RandomizationValidation_Tests : RandomizationValidation_TestsBase
     }
 }
 ```
+[&uarr;](#guid)
+
