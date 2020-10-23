@@ -174,9 +174,9 @@ The CountdownTimer class in the example gives functionality that is somewhat sim
 
 The example highlights the following:
 
-1.  The `CountdownTimer` class has code that asynchronously suspends execution of its processing for a designated time.  If testing code also suspends code execution then the performance of tests will decrease which is not desirable as tests are expected to run quickly.  The `CountdownTimer` delays code execution so that it can raise an event (`LoopElapsed`) at consistent intervals.  So that the tests run in an efficient manner the tests set the timer's delay time to zero yet still manage to simulate that the `LoopElapsed` event occurs when expected.
+1.  The `CountdownTimer` class has code that asynchronously suspends execution of its processing for a designated time.  If testing code also suspends code execution then the performance of tests will decrease which is not desirable as tests are expected to run quickly.  The `CountdownTimer` delays code execution so that it can raise an event (`LoopElapsed`) at consistent intervals.  The example sets the timer's delay time to zero yet still manages to simulate that the `LoopElapsed` event occurs when expected.
 2.  How to write test code to determine that execution of a process ended at a designated time.
-3.  The `CountdownTimer` class has an event (`LoopElapsed`) that is raised whenever an iteration of the `CountdownTimer`'s loop elapses.  The example shows how to write code that verifies that when the `LoopElapsed` event is raised then the time that remains for the `CountdownTimer` to continue executing has the expected value.
+3.  How to write code that verifies that when the `LoopElapsed` event is raised then the time that remains for the `CountdownTimer` to continue executing has the expected value.
 ```C#
 #region CountdownTimer Class
 
