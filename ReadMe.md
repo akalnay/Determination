@@ -170,9 +170,13 @@ public void WhenTheIsItTeaTimeMethodRetrievesTheCurrentDateTimeValueMoreThanOnce
 ```
 [&uarr;](#dates-and-times)
 #### Countdown Timer
-The CountdownTimer class gives functionality somewhat similar to that of a microwave oven's timer.  The functionality differs in that the timer in a microwave oven will countdown for a specified time (e.g. for one minute) whereas the CountdownTimer will count down until a specified date-time is reached.  
+The CountdownTimer class in the example gives functionality that is somewhat similar to that of a microwave oven's timer; while the timer in a microwave oven will count down for a specified time (e.g. for one minute) the CountdownTimer will count down until a specified date-time is reached.  
 
-The example uses the `Determination` API to test if the countdown timer runs for its designated time.
+The example highlights the following:
+
+1.  The `CountdownTimer` class has code that asynchronously suspends execution of its processing for a designated time.  If testing code also suspends code execution then the performance of tests will decrease which is not desirable as tests are expected to run quickly.  The `CountdownTimer` delays code execution so that it can raise an event (`LoopElapsed`) at consistent intervals.  So that the tests run in an efficient manner the tests set the timer's delay time to zero yet still manage to simulate that the `LoopElapsed` event occurs when expected.
+2.  How to write test code to determine that execution of a process ended at a designated time.
+3.  The `CountdownTimer` class has an event (`LoopElapsed`) that is raised whenever an iteration of the `CountdownTimer`'s loop elapses.  The example shows how to write code that verifies that when the `LoopElapsed` event is raised then the time that remains for the `CountdownTimer` to continue executing has the expected value.
 ```C#
 #region CountdownTimer Class
 
