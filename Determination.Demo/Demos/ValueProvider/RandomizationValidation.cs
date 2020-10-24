@@ -69,7 +69,7 @@ namespace Determination.Demo
 
     public class RandomizationValidation_Tests : RandomizationValidation_TestsBase
     {
-        [TestCaseSource(typeof(TestCases), nameof(TestCases.TestCase1), new object[] { nameof(Test1) } )]
+        [TestCaseSource(typeof(TestCases), nameof(TestCases.TestCase1), new object[] { nameof(WhenAllRandomizedValuesInARangeAreGenerated_ThenTheTestPasses) } )]
         [MaxTime(100)]
         [Category("2 - Demo - Randomization - RandomizationValidation Tests")]
         // This test validates that randomized values include all
@@ -105,7 +105,7 @@ namespace Determination.Demo
             }
         }
 
-        [TestCaseSource(typeof(TestCases), nameof(TestCases.TestCase2), new object[] { nameof(Test2) })]
+        [TestCaseSource(typeof(TestCases), nameof(TestCases.TestCase2), new object[] { nameof(WhenTheRandomizedValuesAreEvenlyDistributed_ThenTheTestPasses) })]
         [Category("2 - Demo - Randomization - RandomizationValidation Tests")]
         // This test validates the evenness of the distribution of
         // randomly generated values.
