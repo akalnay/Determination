@@ -97,7 +97,7 @@ This method can be tested with unit tests.  Two items are of note here:
     2. Two date-time values are provided when creating the `CurrentDateTimeProviderStub` class instance.  However only one of the provided values will be used by the `IsItTeaTime1` method.
 3. `IsItTeaTime2(ICurrentDateTimeProvider currentDateTimeProvider, DateTime startDateTime, DateTime endDateTime)`).
 This method can also be tested with unit tests.  Two items are of note here:  
-    1. This method retrieves the current date-time twice; this introduces a slight bug rather than determining the current date-time when invoked, it uses the current date-time when calculating if the value is within the required range.  It is possible that when the current date time is retrieved for the first time the value falls within the required range, whereas when it is retrieved a second time it is outside of the range.
+    1. This method retrieves the current date-time twice; this introduces a slight bug:  rather than determining the current date-time when invoked, the method uses the current date-time when calculating if the value is within the required range.  It is possible that when the current date time is retrieved for the first time the value falls within the required range, whereas when it is retrieved a second time it is outside of the range.
     2. Two date-time values are provided when creating the `CurrentDateTimeProviderStub` class instance; the first value provided falls within the date-time range being tested while the second value falls outside the range.  This will cause the method's calculation to fail and the method will produce an erroneous result.
 
 ```C#
